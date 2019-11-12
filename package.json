@@ -1,0 +1,24 @@
+{
+	"name": "sketches",
+	"version": "1.0.0",
+	"description": "All of my p5.js sketches and gifs.",
+	"main": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yacoubb/sketches.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/yacoubb/sketches/issues"
+	},
+	"homepage": "https://yacoubahmed.me/art",
+	"dependencies": {
+		"@types/p5": "^0.9.0",
+		"p5": "^0.10.2"
+	}
+}

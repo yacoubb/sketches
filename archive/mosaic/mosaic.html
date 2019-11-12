@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="mosaic.css" />
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+		<script src="./mosaic.js"></script>
+	</head>
+	<body style="background-color: #515151">
+		<div style="width: 20%; height: 100%; float:left; text-align: center; background-color: #515151">
+			<div id="usernamebox">
+				<input type="text" id="usernameInput" />
+				<button onclick="setUsername();">
+					Set Username
+				</button>
+			</div>
+			<div class="slidecontainer">
+				<input type="range" min="0" max="255" value="255" class="slider" id="redRange" oninput="document.getElementById('redInput').value=this.value; updateInputs();" />
+				<input
+					type="number"
+					min="0"
+					max="255"
+					value="255"
+					id="redInput"
+					oninput="if(this.value < 0) {this.value = 0;} if(this.value > 255) {this.value = 255;}document.getElementById('redRange').value=this.value; updateInputs();"
+				/>
+				<input type="range" min="0" max="255" value="0" class="slider" id="greenRange" oninput="document.getElementById('greenInput').value=this.value; updateInputs();" />
+				<input
+					type="number"
+					min="0"
+					max="255"
+					value="0"
+					id="greenInput"
+					oninput="if(this.value < 0) {this.value = 0;} if(this.value > 255) {this.value = 255;}document.getElementById('greenRange').value=this.value; updateInputs();"
+				/>
+				<input type="range" min="0" max="255" value="0" class="slider" id="blueRange" oninput="document.getElementById('blueInput').value=this.value; updateInputs();" />
+				<input
+					type="number"
+					min="0"
+					max="255"
+					value="0"
+					id="blueInput"
+					oninput="if(this.value < 0) {this.value = 0;} if(this.value > 255) {this.value = 255;}document.getElementById('blueRange').value=this.value; updateInputs();"
+				/>
+				<div id="colorBox" style="width: 60%; padding-top: 50%; margin-left: 18%; margin-top: 10%; background: red"></div>
+			</div>
+		</div>
+		<div id="canvasContainer" style="width: 80%; height: 100%; float:right;"></div>
+	</body>
+</html>
+<title>
+	mosaic
+</title>
