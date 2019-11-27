@@ -1,0 +1,31 @@
+{
+	"flocking": {
+		"id": "flocking",
+		"description": ["Flocking", "An example of emergent intelligence. By encoding simple properties into each agent, complex and sophisticated behaviour begins to arise."],
+
+		"extras": [
+			"In this example each agent is programmed to do 3 things. 1. Avoid crashing into other agents. 2. Match the average direction of nearby agents. 3. Avoid the mouse when it is clicked down. These simple rules can lead to complex and organic looking alignment amongst all of the agents in the scene."
+		],
+		"args": { "carCount": 100 }
+	},
+	"magnets": { "id": "magnets", "description": ["Magnets", "Not much to say really, just a bunch of magnets."] },
+	"mountain": {
+		"id": "mountain",
+		"description": ["Mountains", "I forget where I got the inspiration to make this. The colors look nice though."]
+	},
+	"drawingMachine": {
+		"id": "drawingMachine",
+		"description": ["Drawing Machine", "Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."]
+	},
+	"planets": {
+		"id": "planets",
+		"description": ["Planets", "Not quite to scale. Move with WASDZXR."]
+	},
+	"astar": {
+		"id": "astar",
+		"description": [
+			"A* Pathfinding",
+			"Click to draw walls, shift click to remove walls. Hold S/E and click to place the start and end points. Press space to start/stop searching and press D for tile cost information."
+		]
+	}
+}
