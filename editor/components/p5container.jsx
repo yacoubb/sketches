@@ -16,15 +16,15 @@ class P5Container extends Component {
 		// console.log(this.props);
 	}
 
-	renderP5 = id => {
-		const sketch = require(`../sketchfiles/${id}`).default(100, 100, id, {});
-		return <P5Wrapper sketch={sketch} />;
+	renderP5 = (id, params) => {
+		const sketch = require(`../sketchfiles/${id}`).default(100, 100, id, params);
+		return <P5Wrapper sketch={sketch} state={this.props.state} />;
 	};
 
 	render() {
 		return (
 			<div id={this.props.id} style={{ width: '100%', height: '100%' }}>
-				{this.renderP5(this.props.id)}
+				{this.renderP5(this.props.id, this.props.params)}
 			</div>
 		);
 	}

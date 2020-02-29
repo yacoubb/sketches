@@ -5,46 +5,62 @@ export default (width, height, parentDivID, params) => p => {
 	var w = 10;
 	var mapWidth, mapHeight;
 	var cellTypes = [];
-	var typeCount = 0;
 	var iteration = 0;
-	var smoothness = 10;
-	var wSlider;
+	var smoothness = 6;
+	var sketchContainer;
 
 	p.setup = () => {
-		p.createCanvas(width, height);
+		sketchContainer = document.getElementById(parentDivID);
+		const canvas = p.createCanvas(width, height);
+		canvas.parent(parentDivID);
+
+		p.noLoop();
 		setTimeout(() => {
 			p.windowResized();
+			p.loop();
 		}, 10);
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(document.getElementById(parentDivID).offsetWidth, document.getElementById(parentDivID).offsetHeight);
-		p.init([Math.floor(p.width / w), Math.floor(p.height / w), p.color(0, 0, 0, 255), 0.48, p.color(255, 255, 255, 255), 0.52]);
+		p.resizeCanvas(sketchContainer.offsetWidth, sketchContainer.offsetHeight);
+		p.init();
 	};
 
-	p.init = options => {
+	p.myCustomRedrawAccordingToNewPropsHandler = newProps => {
+		console.log(newProps);
+	};
+
+	p.init = () => {
 		cells = [];
 		iteration = 0;
-		mapWidth = options[0];
-		mapHeight = options[1];
-		cellTypes = options.splice(2, options.length - 2);
-		typeCount = cellTypes.length / 2;
-		for (var y = 0; y < mapHeight; y++) {
-			var row = [];
-			for (var x = 0; x < mapWidth; x++) {
+		mapWidth = Math.floor(p.width / w);
+		mapHeight = Math.floor(p.height / w);
+		cellTypes = [p.color(0, 0, 0, 255), p.color(255, 255, 255, 255)];
+		var densities = [0.48, 0.52];
+
+		if (cellTypes.length != densities.length) {
+			throw "cellTypes doesn't match densities!";
+		}
+		if (densities.reduce((a, b) => a + b, 0) != 1) {
+			throw "densities don't add to 1!";
+		}
+
+		for (var x = 0; x < mapWidth; x++) {
+			var col = [];
+			for (var y = 0; y < mapHeight; y++) {
 				var type = p.random();
 				var cell;
 				var total = 0;
-				for (var i = 0; i < typeCount; i++) {
-					total += cellTypes[2 * i + 1];
+				for (var i = 0; i < cellTypes.length; i++) {
+					total += densities[i];
 					if (type < total) {
 						cell = new Cell(x, y, i);
 						break;
 					}
 				}
-				row.push(cell);
+				col.push(cell);
 			}
-			cells.push(row);
+			cells.push(col);
 		}
 	};
 
@@ -55,22 +71,29 @@ export default (width, height, parentDivID, params) => p => {
 
 	p.keyPressed = () => {
 		if (p.keyCode == 32) {
-			p.init([Math.floor(p.width / w), Math.floor(p.width / w), p.color(0, 0, 0, 255), 0.48, p.color(255, 255, 255, 255), 0.52]);
+			p.init();
 		}
 	};
 
 	p.smoothMap = () => {
-		var newMap = cells.slice();
+		var newMap = [];
+		for (var x = 0; x < mapWidth; x++) {
+			var col = [];
+			for (var y = 0; y < mapHeight; y++) {
+				col.push(new Cell(x, y, cells[x][y].type));
+			}
+			newMap.push(col);
+		}
 		for (var x = 0; x < mapWidth; x++) {
 			for (var y = 0; y < mapHeight; y++) {
-				if (cells[y][x].neighbourCount(1) > 4) {
-					newMap[y][x].type = 1;
+				if (cells[x][y].neighbourCount(1) > 4) {
+					newMap[x][y].type = 1;
 				}
-				if (cells[y][x].neighbourCount(1) <= 3) {
-					newMap[y][x].type = 0;
+				if (cells[x][y].neighbourCount(1) <= 3) {
+					newMap[x][y].type = 0;
 				}
 				if (y == 0 || x == 0 || y == mapHeight - 1 || x == mapWidth - 1) {
-					newMap[y][x].type = 0;
+					newMap[x][y].type = 0;
 				}
 			}
 		}
@@ -87,7 +110,7 @@ export default (width, height, parentDivID, params) => p => {
 		}
 		for (var x = 0; x < mapWidth; x++) {
 			for (var y = 0; y < mapHeight; y++) {
-				cells[y][x].show();
+				cells[x][y].show();
 			}
 		}
 	};
@@ -101,11 +124,11 @@ export default (width, height, parentDivID, params) => p => {
 
 		neighbourCount(neighborType) {
 			let count = 0;
-			for (var j = this.y - 1; j <= this.y + 1; j++) {
-				for (var i = this.x - 1; i <= this.x + 1; i++) {
+			for (var i = this.x - 1; i <= this.x + 1; i++) {
+				for (var j = this.y - 1; j <= this.y + 1; j++) {
 					if (j != this.y || i != this.x) {
 						if (j >= 0 && j < mapHeight - 1 && i >= 0 && i < mapWidth - 1) {
-							if (cells[j][i].type == neighborType) {
+							if (cells[i][j].type == neighborType) {
 								count++;
 							}
 						}
@@ -119,7 +142,7 @@ export default (width, height, parentDivID, params) => p => {
 			var xCoord = this.x * w;
 			var yCoord = this.y * w;
 			p.noStroke();
-			p.fill(cellTypes[2 * this.type]);
+			p.fill(cellTypes[this.type]);
 			p.rect(xCoord, yCoord, w, w);
 		}
 		highlight() {

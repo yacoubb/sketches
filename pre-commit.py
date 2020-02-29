@@ -24,7 +24,7 @@ with open('./sketch-index.json', 'r') as index_file:
 print(f'got {len(list(index))} sketches in index:')
 
 for sketch_name in list(index):
-    print(f' {sketch_name}')
+    print(f'    {sketch_name}')
     sketch_folder_path = os.path.abspath(f'./interactive/{sketch_name}')
     if not os.path.isdir(sketch_folder_path):
         print(f'making new folder for sketch {sketch_name}')

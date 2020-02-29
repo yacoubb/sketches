@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Head from 'next/head';
-import P5Container from '../p5container';
+import P5Container from '../../components/p5container';
 
 class Index extends Component {
 	static async getInitialProps(ctx) {
