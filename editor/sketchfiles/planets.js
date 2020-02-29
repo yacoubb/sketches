@@ -1,6 +1,6 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	var radii = [200, 4.9 * 2, 12.1 * 2, 12.8 * 2, 6.8 * 2, 143 / 2, 120 / 2, 51.1 / 2, 49.5 / 2, 2.3 * 3];
 	var baseSpeeds = [0, 47, 35, 30, 24, 13, 10, 7, 5.4, 4.7];
 	var speeds = [];

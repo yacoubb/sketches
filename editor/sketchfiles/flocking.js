@@ -1,9 +1,9 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
-	console.log(params);
-	if (params.carCount == null) {
-		params.carCount = 30;
+export default (width, height, parentDivID, args) => p => {
+	console.log(args);
+	if (args.carCount == null) {
+		args.carCount = 30;
 	}
 	var running = true;
 
@@ -45,7 +45,7 @@ export default (width, height, parentDivID, params) => p => {
 			p.color(255, 0, 0, carOpacity),
 			p.color(0, 255, 0, carOpacity),
 		];
-		for (var i = 0; i < params.carCount; i++) {
+		for (var i = 0; i < args.carCount; i++) {
 			cars.push(new p.Car(p.random(p.width), p.random(p.height), p.random(minR, maxR)));
 		}
 	};

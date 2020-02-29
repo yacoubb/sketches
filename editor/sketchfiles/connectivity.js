@@ -1,5 +1,5 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	var r = 300;
 	var points = 40;
 	var segments = 200;

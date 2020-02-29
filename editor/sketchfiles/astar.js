@@ -1,6 +1,6 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	var grid = [];
 	var w = 40;
 	var minW = 10;
