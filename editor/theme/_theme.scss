@@ -1,0 +1,9 @@
+// theme/_theme.scss
+
+@import './fonts';
+@import './colors';
+
+$theme-colors: (
+	'primary': #0074d9,
+	'success': #ff4136
+);

@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
+import Layout from '../../components/layout';
 import Head from 'next/head';
 import P5Container from '../../components/p5container';
+import css from '../../components/main.scss';
 
-class Index extends Component {
+import sketchIndex from '../../../sketch-index.json';
+
+class P5Page extends Component {
 	static async getInitialProps(ctx) {
 		const sketchId = ctx.query.id;
+		const sketchInfo = sketchIndex[sketchId];
 		return {
 			sketchId,
+			sketchInfo,
 		};
 	}
 
@@ -18,17 +24,25 @@ class Index extends Component {
 					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 					<title>Art</title>
 				</Head>
-				<div style={{ background: '#515151' }}>
-					<h1>{this.props.sketchId}</h1>
-					<div style={{ width: '100%', height: '80vh' }}>
-						<P5Container id={this.props.sketchId} />
-					</div>
+				<Layout>
+					<div className="container" style={{ paddingTop: '2em' }}>
+						<h1>{this.props.sketchInfo['title']}</h1>
+						<div>
+							{this.props.sketchInfo['description'].map((val, idx) => (
+								<p key={idx}>{val}</p>
+							))}
+						</div>
+						<div style={{ width: '100%', height: '70vh' }}>
+							<P5Container {...this.props.sketchInfo} />
+						</div>
 
-					<br />
-				</div>
+						<br />
+						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>Interactive pages work best on desktop!</p>
+					</div>
+				</Layout>
 			</>
 		);
 	}
 }
 
-export default Index;
+export default P5Page;
