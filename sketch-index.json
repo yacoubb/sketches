@@ -11,16 +11,26 @@
 		],
 		"args": { "carCount": 100 }
 	},
-	"magnets": { "id": "magnets", "description": ["Magnets", "Not much to say really, just a bunch of magnets."] },
+	"magnets": {
+		"id": "magnets",
+		"description": [
+			"Magnets",
+			"Not much to say really, just a bunch of magnets."
+		]
+	},
 	"mountain": {
 		"id": "mountain",
 		"title": "Mountains",
-		"description": ["I forget where I got the inspiration to make this. The colors look nice though."]
+		"description": [
+			"I forget where I got the inspiration to make this. The colors look nice though."
+		]
 	},
 	"drawingMachine": {
 		"id": "drawingMachine",
 		"title": "Drawing Machine",
-		"description": ["Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."]
+		"description": [
+			"Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."
+		]
 	},
 	"planets": {
 		"id": "planets",
@@ -37,8 +47,6 @@
 	"caves": {
 		"id": "caves",
 		"title": "Cave Generation",
-		"description": [
-			"Click to draw walls, shift click to remove walls. Hold S/E and click to place the start and end points. Press space to start/stop searching and press D for tile cost information."
-		]
+		"description": ["Cave generator powered by cellular automata."]
 	}
 }
