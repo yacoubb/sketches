@@ -10,9 +10,10 @@ export default (width, height, parentDivID, args) => p => {
 	var sketchContainer;
 
 	p.setup = () => {
+		console.log('setup');
+		console.log(args);
 		sketchContainer = document.getElementById(parentDivID);
 		const canvas = p.createCanvas(width, height);
-		canvas.parent(parentDivID);
 
 		p.noLoop();
 		setTimeout(() => {
@@ -22,7 +23,11 @@ export default (width, height, parentDivID, args) => p => {
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(sketchContainer.offsetWidth, sketchContainer.offsetHeight);
+		if (sketchContainer.offsetWidth <= sketchContainer.offsetHeight) {
+			p.resizeCanvas(sketchContainer.offsetWidth, sketchContainer.offsetWidth);
+		} else {
+			p.resizeCanvas(sketchContainer.offsetWidth, sketchContainer.offsetHeight);
+		}
 		p.init();
 	};
 
@@ -31,15 +36,23 @@ export default (width, height, parentDivID, args) => p => {
 	};
 
 	p.init = () => {
+		if (args.seed.length > 0) {
+			p.randomSeed(args.seed.hashCode());
+		} else {
+			p.randomSeed(args.runTime);
+		}
+		if (args.w > 0) {
+			w = args.w;
+		}
 		cells = [];
 		iteration = 0;
 		mapWidth = Math.floor(p.width / w);
 		mapHeight = Math.floor(p.height / w);
 		cellTypes = [p.color(0, 0, 0, 255), p.color(255, 255, 255, 255)];
-		var densities = [0.48, 0.52];
+		var densities = [p.float(args.density), 1 - p.float(args.density)];
 
 		if (cellTypes.length != densities.length) {
-			throw "cellTypes doesn't match densities!";
+			throw "cellTypes length doesn't match densities!";
 		}
 		if (densities.reduce((a, b) => a + b, 0) != 1) {
 			throw "densities don't add to 1!";
@@ -61,17 +74,6 @@ export default (width, height, parentDivID, args) => p => {
 				col.push(cell);
 			}
 			cells.push(col);
-		}
-	};
-
-	// p.setup = () => {
-	// 	p.createCanvas(windowWidth, windowHeight);
-	// 	// wSlider = createSlider(2, 40, 10, 1);
-	// };
-
-	p.keyPressed = () => {
-		if (p.keyCode == 32) {
-			p.init();
 		}
 	};
 
@@ -102,8 +104,6 @@ export default (width, height, parentDivID, args) => p => {
 
 	p.draw = () => {
 		p.background(0);
-		// w = wSlider.value();
-		w = 10;
 		if (iteration < smoothness) {
 			p.smoothMap();
 			iteration++;
@@ -153,4 +153,17 @@ export default (width, height, parentDivID, args) => p => {
 			p.rect(xCoord, yCoord, w, w);
 		}
 	}
+};
+
+String.prototype.hashCode = function() {
+	var hash = 0,
+		i,
+		chr;
+	if (this.length === 0) return hash;
+	for (i = 0; i < this.length; i++) {
+		chr = this.charCodeAt(i);
+		hash = (hash << 5) - hash + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
 };

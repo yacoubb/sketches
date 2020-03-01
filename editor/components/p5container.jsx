@@ -12,12 +12,13 @@ class P5Container extends Component {
 		this.state = {};
 	}
 
-	componentDidMount() {
-		// console.log(this.props);
+	shouldComponentUpdate(nextProps, nextState) {
+		return JSON.stringify(nextProps) !== JSON.stringify(this.props);
 	}
 
 	renderP5 = (id, args) => {
-		const sketch = require(`../sketchfiles/${id}`).default(100, 100, id, args);
+		console.log(this.state.height);
+		const sketch = require(`../sketchfiles/${id}`).default(200, 200, id, args);
 		return <P5Wrapper sketch={sketch} state={this.props.state} />;
 	};
 
