@@ -4,7 +4,7 @@ import Head from 'next/head';
 import P5Container from '../../components/p5container';
 import css from '../../components/main.scss';
 
-import sketchIndex from '../../sketches/sketch-index.json.js';
+import sketchIndex from '../../../sketch-index.json';
 
 class P5Page extends Component {
 	static async getInitialProps(ctx) {
