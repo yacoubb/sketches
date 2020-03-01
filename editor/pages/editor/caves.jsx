@@ -4,7 +4,7 @@ import Head from 'next/head';
 import P5Container from '../../components/p5container';
 import css from '../../components/main.scss';
 
-import sketchIndex from '../../../sketch-index.json';
+import sketchIndex from '../../sketches/sketch-index.json.js';
 
 class P5Page extends Component {
 	constructor(props) {
@@ -67,7 +67,7 @@ class P5Page extends Component {
 									onChange={e => {
 										this.setState({ density: e.target.value });
 									}}
-								></input>
+								/>
 
 								{`Scale: ${this.state.w}`}
 								<input
@@ -81,7 +81,7 @@ class P5Page extends Component {
 									onChange={e => {
 										this.setState({ w: e.target.value });
 									}}
-								></input>
+								/>
 
 								<input
 									type="text"
@@ -93,7 +93,7 @@ class P5Page extends Component {
 										this.setState({ seed: e.target.value });
 									}}
 									style={{ margin: '1em 0 1em 0' }}
-								></input>
+								/>
 								<button
 									className="btn btn-primary btn-block"
 									onClick={this.updateArgs}

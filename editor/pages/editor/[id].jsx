@@ -4,7 +4,7 @@ import Head from 'next/head';
 import P5Container from '../../components/p5container';
 import css from '../../components/main.scss';
 
-import sketchIndex from '../../../sketch-index.json';
+import sketchIndex from '../../sketches/sketch-index.json.js';
 
 class P5Page extends Component {
 	static async getInitialProps(ctx) {
@@ -21,7 +21,10 @@ class P5Page extends Component {
 			<>
 				<Head>
 					<meta charSet="utf-8" />
-					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+					<meta
+						name="viewport"
+						content="width=device-width, initial-scale=1.0"
+					/>
 					<title>Art</title>
 				</Head>
 				<Layout>
@@ -37,7 +40,9 @@ class P5Page extends Component {
 						</div>
 
 						<br />
-						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>Interactive pages work best on desktop!</p>
+						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>
+							Interactive pages work best on desktop!
+						</p>
 					</div>
 				</Layout>
 			</>
