@@ -1,6 +1,10 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
+	console.log(args);
+	if (args.carCount == null) {
+		args.carCount = 30;
+	}
 	var running = true;
 
 	var cars = [];
@@ -41,7 +45,7 @@ export default (width, height, parentDivID, params) => p => {
 			p.color(255, 0, 0, carOpacity),
 			p.color(0, 255, 0, carOpacity),
 		];
-		for (var i = 0; i < params.carCount; i++) {
+		for (var i = 0; i < args.carCount; i++) {
 			cars.push(new p.Car(p.random(p.width), p.random(p.height), p.random(minR, maxR)));
 		}
 	};
@@ -51,10 +55,7 @@ export default (width, height, parentDivID, params) => p => {
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(
-			document.getElementById(parentDivID).offsetWidth,
-			document.getElementById(parentDivID).offsetHeight
-		);
+		p.resizeCanvas(document.getElementById(parentDivID).offsetWidth, document.getElementById(parentDivID).offsetHeight);
 	};
 
 	p.draw = () => {
@@ -64,11 +65,11 @@ export default (width, height, parentDivID, params) => p => {
 			clickOpacity *= 0.7;
 		}
 		if (clickOpacity > 0) {
-			p.textSize(200);
+			p.textSize(Math.min(p.width, p.height) * 0.15);
 			p.noStroke();
 			p.fill(0, 255, 255, clickOpacity);
 			p.textAlign(p.CENTER, p.CENTER);
-			p.text('click', p.width / 2, p.height / 2);
+			p.text('click and hold', p.width / 2, p.height / 2);
 		}
 		p.fill(200, 255);
 

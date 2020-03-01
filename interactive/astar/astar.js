@@ -1,6 +1,6 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	var grid = [];
 	var w = 40;
 	var minW = 10;
@@ -221,15 +221,4 @@ export default (width, height, parentDivID, params) => p => {
 			return this.gCost + this.hCost;
 		}
 	}
-	// p.tile = (x, y, t) => {
-	// 	this.x = x;
-	// 	this.y = y;
-	// 	this.t = t;
-	// 	this.cameFrom = null;
-	// 	this.gCost = Infinity;
-	// 	this.hCost = Infinity;
-	// 	this.fCost = function() {
-	// 		return this.gCost + this.hCost;
-	// 	};
-	// };
 };

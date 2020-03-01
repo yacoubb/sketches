@@ -1,18 +1,7 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
-	var radii = [
-		200,
-		4.9 * 2,
-		12.1 * 2,
-		12.8 * 2,
-		6.8 * 2,
-		143 / 2,
-		120 / 2,
-		51.1 / 2,
-		49.5 / 2,
-		2.3 * 3,
-	];
+export default (width, height, parentDivID, args) => p => {
+	var radii = [200, 4.9 * 2, 12.1 * 2, 12.8 * 2, 6.8 * 2, 143 / 2, 120 / 2, 51.1 / 2, 49.5 / 2, 2.3 * 3];
 	var baseSpeeds = [0, 47, 35, 30, 24, 13, 10, 7, 5.4, 4.7];
 	var speeds = [];
 	var cols = [
@@ -45,10 +34,7 @@ export default (width, height, parentDivID, params) => p => {
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(
-			document.getElementById(parentDivID).offsetWidth,
-			document.getElementById(parentDivID).offsetHeight
-		);
+		p.resizeCanvas(document.getElementById(parentDivID).offsetWidth, document.getElementById(parentDivID).offsetHeight);
 		p.init();
 	};
 
@@ -93,12 +79,7 @@ export default (width, height, parentDivID, params) => p => {
 					p.fill(181, 95, 20);
 					p.arc(x, y, planetw, planetw, 0, Math.PI);
 					p.fill(125, 51, 0);
-					p.ellipse(
-						x + w * 18 * zoom,
-						y + 13 * w * zoom,
-						radii[i] * w * zoom * 0.1,
-						radii[i] * w * zoom * 0.1
-					);
+					p.ellipse(x + w * 18 * zoom, y + 13 * w * zoom, radii[i] * w * zoom * 0.1, radii[i] * w * zoom * 0.1);
 					break;
 				case 6:
 					//saturn

@@ -1,6 +1,6 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	let magnets = [];
 	const w = 60;
 
@@ -12,10 +12,7 @@ export default (width, height, parentDivID, params) => p => {
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(
-			document.getElementById(parentDivID).offsetWidth,
-			document.getElementById(parentDivID).offsetHeight
-		);
+		p.resizeCanvas(document.getElementById(parentDivID).offsetWidth, document.getElementById(parentDivID).offsetHeight);
 		p.init();
 	};
 

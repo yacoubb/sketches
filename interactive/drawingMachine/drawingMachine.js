@@ -1,6 +1,6 @@
 /// <reference path="../../node_modules/@types/p5/global.d.ts" />
 
-export default (width, height, parentDivID, params) => p => {
+export default (width, height, parentDivID, args) => p => {
 	const chroma = require('chroma-js');
 	var colors = chroma
 		.cubehelix()
@@ -21,10 +21,7 @@ export default (width, height, parentDivID, params) => p => {
 	};
 
 	p.windowResized = function() {
-		p.resizeCanvas(
-			document.getElementById(parentDivID).offsetWidth,
-			document.getElementById(parentDivID).offsetHeight
-		);
+		p.resizeCanvas(document.getElementById(parentDivID).offsetWidth, document.getElementById(parentDivID).offsetHeight);
 		p.init();
 	};
 
@@ -67,20 +64,10 @@ export default (width, height, parentDivID, params) => p => {
 			const offsetX = Math.cos(a + hinge.t * p.frameCount) * w;
 			const offsetY = Math.sin(a + hinge.t * p.frameCount) * w;
 			if (hinge.x > p.width * 0.1) {
-				p.line(
-					hinge.x + offsetX,
-					hinge.y + offsetY,
-					hinge.x + offsetX,
-					hinge.y + offsetY + p.height
-				);
+				p.line(hinge.x + offsetX, hinge.y + offsetY, hinge.x + offsetX, hinge.y + offsetY + p.height);
 				hinge.trueX = hinge.x + offsetX;
 			} else {
-				p.line(
-					hinge.x + offsetX,
-					hinge.y + offsetY,
-					hinge.x + offsetX + p.width,
-					hinge.y + offsetY
-				);
+				p.line(hinge.x + offsetX, hinge.y + offsetY, hinge.x + offsetX + p.width, hinge.y + offsetY);
 				hinge.trueY = hinge.y + offsetY;
 			}
 		}
