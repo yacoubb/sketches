@@ -41,8 +41,8 @@ export default (width, height, parentDivID, args) => p => {
 		} else {
 			p.randomSeed(args.runTime);
 		}
-		if (args.w > 0) {
-			w = args.w;
+		if (args.scale > 0) {
+			w = args.scale;
 		}
 		cells = [];
 		iteration = 0;
