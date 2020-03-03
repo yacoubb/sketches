@@ -17,7 +17,6 @@ class P5Container extends Component {
 	}
 
 	renderP5 = (id, args) => {
-		console.log(this.state.height);
 		const sketch = require(`../sketchfiles/${id}`).default(200, 200, id, args);
 		return <P5Wrapper sketch={sketch} state={this.props.state} />;
 	};

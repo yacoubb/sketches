@@ -8,6 +8,8 @@ import json
 print('=' * 10 + 'pre-commit.py' + '=' * 10)
 print('loading sketches and thumbnails')
 
+print('double check import statements before pushing!')
+
 sketch_files = {}
 for filename in os.listdir('./editor/sketchfiles'):
     sketch_files[filename[:-3]] = os.path.abspath(os.path.join('./editor/sketchfiles', filename))
