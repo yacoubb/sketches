@@ -13,10 +13,8 @@
 	},
 	"magnets": {
 		"id": "magnets",
-		"description": [
-			"Magnets",
-			"Not much to say really, just a bunch of magnets."
-		]
+		"title": "Magnets",
+		"description": ["Not much to say really, just a bunch of magnets."]
 	},
 	"mountain": {
 		"id": "mountain",
@@ -84,5 +82,13 @@
 				"update": true
 			}
 		]
+	},
+	"mandala": {
+		"id": "mandala",
+		"title": "Mandala Generator",
+		"description": [
+			"Procedurally generated circle patterns. Pattern segments are generated using perlin noise. Press R to generate a new pattern."
+		],
+		"gui": []
 	}
 }
