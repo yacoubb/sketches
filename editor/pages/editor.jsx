@@ -20,6 +20,12 @@ export default function Art() {
 		</div>
 	));
 
+	window.addEventListener('keydown', function(e) {
+		if (e.keyCode == 32) {
+			e.preventDefault();
+		}
+	});
+
 	return (
 		<>
 			<Head>

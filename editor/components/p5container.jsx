@@ -9,22 +9,20 @@ const P5Wrapper = dynamic(import('react-p5-wrapper'), {
 class P5Container extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			sketch: require(`../sketchfiles/${props.id}`).default,
+		};
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
 		return JSON.stringify(nextProps) !== JSON.stringify(this.props);
 	}
 
-	renderP5 = (id, args) => {
-		const sketch = require(`../sketchfiles/${id}`).default(200, 200, id, args);
-		return <P5Wrapper sketch={sketch} state={this.props.state} />;
-	};
-
 	render() {
+		console.log(this.state.sketch);
 		return (
 			<div id={this.props.id} style={{ width: '100%', height: '100%' }}>
-				{this.renderP5(this.props.id, this.props.args)}
+				<P5Wrapper sketch={this.state.sketch(200, 200, this.props.id, this.props.args)} state={this.props.state} />
 			</div>
 		);
 	}
