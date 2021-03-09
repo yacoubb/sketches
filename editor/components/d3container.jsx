@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 
-class D3Container extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+const D3Container = ({ id, args }) => {
+	const [d3Sketch, setD3Sketch] = useState(undefined);
+	const [svgWidth, setSvgWidth] = useState(200);
 
-	shouldComponentUpdate(nextProps, nextState) {
-		return JSON.stringify(nextProps) !== JSON.stringify(this.props);
-	}
+	const computeWidth = () => setSvgWidth(document.getElementById(id).offsetWidth);
+	useEffect(() => {
+		setD3Sketch(() => require(`../sketchfiles/${id}`).default);
+		window?.addEventListener('resize', computeWidth);
+		return () => window?.removeEventListener('resize', computeWidth);
+	}, []);
+	useLayoutEffect(() => {
+		computeWidth();
+		if (d3Sketch) {
+			return d3Sketch({ id, ...args });
+		}
+	});
 
-	renderP5 = (id, args) => {
-		const sketch = require(`../sketchfiles/${id}`).default(200, 200, id, args);
-		return <P5Wrapper sketch={sketch} state={this.props.state} />;
-	};
-
-	render() {
-		return (
-			<div id={this.props.id} style={{ width: '100%', height: '100%' }}>
-				<svg id="d3" width="200" height="200"></svg>
-			</div>
-		);
-	}
-}
+	return <div id={id} style={{ width: '100%', height: '100%' }}></div>;
+};
 
 export default D3Container;

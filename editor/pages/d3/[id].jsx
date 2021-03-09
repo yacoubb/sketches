@@ -4,13 +4,13 @@ import Head from 'next/head';
 import D3Container from '../../components/d3container';
 import css from '../../components/main.scss';
 
-import d3Index from '../../../d3-index.json';
+import index from '../../../sketch-index.json';
 import Link from 'next/link';
 
 class D3Page extends Component {
 	static async getInitialProps(ctx) {
 		const d3Id = ctx.query.id;
-		var d3Info = d3Index[d3Id];
+		var d3Info = index[d3Id];
 		if (d3Info == undefined) {
 			d3Info = {
 				id: undefined,

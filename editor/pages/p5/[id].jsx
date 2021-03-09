@@ -4,13 +4,13 @@ import Head from 'next/head';
 import P5Container from '../../components/p5container';
 import css from '../../components/main.scss';
 
-import sketchIndex from '../../../sketch-index.json';
+import index from '../../../sketch-index.json';
 import Link from 'next/link';
 
 class P5Page extends Component {
 	static async getInitialProps(ctx) {
 		const sketchId = ctx.query.id;
-		var sketchInfo = sketchIndex[sketchId];
+		var sketchInfo = index[sketchId];
 		if (sketchInfo == undefined) {
 			sketchInfo = {
 				id: undefined,
@@ -65,7 +65,7 @@ class P5Page extends Component {
 										value={this.state[guiElem['id']]}
 										step={guiElem['step']}
 										id={guiElem['id']}
-										onChange={e => {
+										onChange={(e) => {
 											this.setState({ [guiElem['id']]: e.target.value }, () => {
 												if (guiElem['update']) {
 													this.updateArgs();
@@ -86,7 +86,7 @@ class P5Page extends Component {
 									// aria-describedby="emailHelp"
 									placeholder={guiElem['placeholder']}
 									value={this.state[guiElem['id']]}
-									onChange={e => {
+									onChange={(e) => {
 										this.setState({ [guiElem['id']]: e.target.value }, () => {
 											if (guiElem['update']) {
 												this.updateArgs();
@@ -120,10 +120,7 @@ class P5Page extends Component {
 			<>
 				<Head>
 					<meta charSet="utf-8" />
-					<meta
-						name="viewport"
-						content="width=device-width, initial-scale=1.0"
-					/>
+					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 					<title>Art</title>
 				</Head>
 				<Layout>
@@ -137,10 +134,7 @@ class P5Page extends Component {
 						{this.props.sketchInfo['id'] !== undefined ? (
 							<div className="row">
 								<div className="col-lg" style={{ height: '70vmin' }}>
-									<P5Container
-										id={this.props.sketchInfo['id']}
-										args={this.state.args}
-									/>
+									<P5Container id={this.props.sketchInfo['id']} args={this.state.args} />
 								</div>
 								{this.props.sketchInfo['gui'].length > 0 && this.gui()}
 							</div>
@@ -151,9 +145,7 @@ class P5Page extends Component {
 						)}
 
 						<br />
-						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>
-							Interactive pages work best on desktop!
-						</p>
+						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>Interactive pages work best on desktop!</p>
 					</div>
 				</Layout>
 			</>
