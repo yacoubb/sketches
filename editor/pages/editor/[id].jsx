@@ -1,36 +1,38 @@
 import React, { Component } from 'react';
 import Layout from '../../components/layout';
 import Head from 'next/head';
-import D3Container from '../../components/d3container';
 import css from '../../components/main.scss';
 
 import index from '../../../sketch-index.json';
 import Link from 'next/link';
 
-class D3Page extends Component {
+import D3Container from '../../components/d3container';
+import P5Container from '../../components/p5container';
+
+class ArtLayout extends Component {
 	static async getInitialProps(ctx) {
-		const d3Id = ctx.query.id;
-		var d3Info = index[d3Id];
-		if (d3Info == undefined) {
-			d3Info = {
+		const id = ctx.query.id;
+		var info = index[id];
+		if (info == undefined) {
+			info = {
 				id: undefined,
-				title: 'd3 not found',
-				description: [`A d3 with the name ${ctx.query.id} doesn't exist!`],
+				title: 'Page not found',
+				description: [`A sketch with the name ${ctx.query.id} doesn't exist!`],
 			};
 		}
-		if (d3Info['gui'] == undefined) {
-			d3Info['gui'] = [];
+		if (info['gui'] == undefined) {
+			info['gui'] = [];
 		}
 		return {
-			d3Id,
-			d3Info,
+			id,
+			info,
 		};
 	}
 
 	constructor(props) {
 		super(props);
 		this.state = { args: {} };
-		for (var guiElem of props.d3Info['gui']) {
+		for (var guiElem of props.info['gui']) {
 			this.state[guiElem['id']] = guiElem['value'];
 			this.state.args[guiElem['id']] = guiElem['value'];
 		}
@@ -39,7 +41,7 @@ class D3Page extends Component {
 
 	updateArgs() {
 		var updatedArgs = { runTime: new Date().valueOf() };
-		for (var guiElem of this.props.d3Info['gui']) {
+		for (var guiElem of this.props.info['gui']) {
 			updatedArgs[guiElem['id']] = this.state[guiElem['id']];
 		}
 
@@ -49,7 +51,7 @@ class D3Page extends Component {
 	gui() {
 		return (
 			<div className="col-lg-2">
-				{this.props.d3Info['gui'].map((guiElem, idx, arr) => {
+				{this.props.info['gui'].map((guiElem, idx, arr) => {
 					switch (guiElem['type']) {
 						case 'slider':
 							var label = guiElem['label'];
@@ -125,18 +127,23 @@ class D3Page extends Component {
 				</Head>
 				<Layout>
 					<div className="container" style={{ paddingTop: '2em' }}>
-						<h1>{this.props.d3Info['title']}</h1>
+						<h1>{this.props.info['title']}</h1>
 						<div>
-							{this.props.d3Info['description'].map((val, idx) => (
+							{this.props.info['description'].map((val, idx) => (
 								<p key={idx}>{val}</p>
 							))}
 						</div>
-						{this.props.d3Info['id'] !== undefined ? (
+						{this.props.info['id'] !== undefined ? (
 							<div className="row">
 								<div className="col-lg" style={{ height: '70vmin' }}>
-									<D3Container id={this.props.d3Info['id']} args={this.state.args} />
+									{this.props.info['type'] === 'd3' && (
+										<D3Container id={this.props.info['id']} args={this.state.args} />
+									)}
+									{this.props.info['type'] === 'p5' && (
+										<P5Container id={this.props.info['id']} args={this.state.args} />
+									)}
 								</div>
-								{this.props.d3Info['gui'].length > 0 && this.gui()}
+								{this.props.info['gui'].length > 0 && this.gui()}
 							</div>
 						) : (
 							<Link href="/editor">
@@ -153,4 +160,4 @@ class D3Page extends Component {
 	}
 }
 
-export default D3Page;
+export default ArtLayout;
