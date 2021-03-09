@@ -1,6 +1,7 @@
 {
 	"flocking": {
 		"id": "flocking",
+		"type": "p5",
 		"title": "Flocking",
 		"description": [
 			"An example of emergent intelligence. By encoding simple properties into each agent, complex and sophisticated behaviour begins to arise."
@@ -13,30 +14,31 @@
 	},
 	"magnets": {
 		"id": "magnets",
+		"type": "p5",
 		"title": "Magnets",
 		"description": ["Not much to say really, just a bunch of magnets."]
 	},
 	"mountain": {
 		"id": "mountain",
+		"type": "p5",
 		"title": "Mountains",
-		"description": [
-			"I forget where I got the inspiration to make this. The colors look nice though."
-		]
+		"description": ["I forget where I got the inspiration to make this. The colors look nice though."]
 	},
 	"drawingMachine": {
 		"id": "drawingMachine",
+		"type": "p5",
 		"title": "Drawing Machine",
-		"description": [
-			"Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."
-		]
+		"description": ["Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."]
 	},
 	"planets": {
 		"id": "planets",
+		"type": "p5",
 		"title": "Planets",
 		"description": ["Not quite to scale. Move with WASDZXR."]
 	},
 	"astar": {
 		"id": "astar",
+		"type": "p5",
 		"title": "A* Pathfinding",
 		"description": [
 			"Click to draw walls, shift click to remove walls. Hold S/E and click to place the start and end points. Press space to start/stop searching and press D for tile cost information."
@@ -44,6 +46,7 @@
 	},
 	"caves": {
 		"id": "caves",
+		"type": "p5",
 		"title": "Cave Generation",
 		"description": ["Cave generator powered by cellular automata."],
 		"gui": [
@@ -85,10 +88,29 @@
 	},
 	"mandala": {
 		"id": "mandala",
+		"type": "p5",
 		"title": "Mandala Generator",
 		"description": [
 			"Procedurally generated circle patterns. Pattern segments are generated using perlin noise. Press R to generate a new pattern."
 		],
 		"gui": []
+	},
+	"collisions": {
+		"id": "collisions",
+		"type": "d3",
+		"title": "D3-powered collisions",
+		"description": ["Experimenting with D3 forces."],
+		"gui": [
+			{
+				"type": "slider",
+				"id": "count",
+				"label": "Count: $VALUE",
+				"min": 1,
+				"max": 400,
+				"value": 50,
+				"step": 1,
+				"update": true
+			}
+		]
 	}
 }
