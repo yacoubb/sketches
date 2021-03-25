@@ -1,116 +1,157 @@
 {
-	"flocking": {
-		"id": "flocking",
-		"type": "p5",
-		"title": "Flocking",
-		"description": [
-			"An example of emergent intelligence. By encoding simple properties into each agent, complex and sophisticated behaviour begins to arise."
-		],
-
-		"extras": [
-			"In this example each agent is programmed to do 3 things. 1. Avoid crashing into other agents. 2. Match the average direction of nearby agents. 3. Avoid the mouse when it is clicked down. These simple rules can lead to complex and organic looking alignment amongst all of the agents in the scene."
-		],
-		"args": { "carCount": 100 }
-	},
-	"magnets": {
-		"id": "magnets",
-		"type": "p5",
-		"title": "Magnets",
-		"description": ["Not much to say really, just a bunch of magnets."]
-	},
-	"mountain": {
-		"id": "mountain",
-		"type": "p5",
-		"title": "Mountains",
-		"description": ["I forget where I got the inspiration to make this. The colors look nice though."]
-	},
-	"drawingMachine": {
-		"id": "drawingMachine",
-		"type": "p5",
-		"title": "Drawing Machine",
-		"description": ["Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."]
-	},
-	"planets": {
-		"id": "planets",
-		"type": "p5",
-		"title": "Planets",
-		"description": ["Not quite to scale. Move with WASDZXR."]
-	},
-	"astar": {
-		"id": "astar",
-		"type": "p5",
-		"title": "A* Pathfinding",
-		"description": [
-			"Click to draw walls, shift click to remove walls. Hold S/E and click to place the start and end points. Press space to start/stop searching and press D for tile cost information."
-		]
-	},
-	"caves": {
-		"id": "caves",
-		"type": "p5",
-		"title": "Cave Generation",
-		"description": ["Cave generator powered by cellular automata."],
-		"gui": [
-			{
-				"type": "slider",
-				"id": "density",
-				"label": "Density: $VALUE",
-				"min": 0,
-				"max": 1,
-				"value": 0.48,
-				"step": 0.01,
-				"update": false
-			},
-			{
-				"type": "slider",
-				"id": "scale",
-				"label": "Scale: $VALUE",
-				"min": 4,
-				"max": 20,
-				"value": 10,
-				"step": 1,
-				"update": false
-			},
-			{
-				"type": "text",
-				"id": "seed",
-				"placeholder": "Enter seed",
-				"value": "",
-				"update": false
-			},
-			{
-				"type": "button",
-				"id": "generate",
-				"label": "Generate",
-				"className": "btn btn-primary btn-block",
-				"update": true
-			}
-		]
-	},
-	"mandala": {
-		"id": "mandala",
-		"type": "p5",
-		"title": "Mandala Generator",
-		"description": [
-			"Procedurally generated circle patterns. Pattern segments are generated using perlin noise. Press R to generate a new pattern."
-		],
-		"gui": []
-	},
-	"collisions": {
-		"id": "collisions",
-		"type": "d3",
-		"title": "D3-powered collisions",
-		"description": ["Experimenting with D3 forces."],
-		"gui": [
-			{
-				"type": "slider",
-				"id": "count",
-				"label": "Count: $VALUE",
-				"min": 1,
-				"max": 400,
-				"value": 50,
-				"step": 1,
-				"update": true
-			}
-		]
-	}
+    "flocking": {
+        "id": "flocking",
+        "type": "p5",
+        "title": "Flocking",
+        "description": [
+            "An example of emergent intelligence. By encoding simple properties into each agent, complex and sophisticated behaviour begins to arise."
+        ],
+        "extras": [
+            "In this example each agent is programmed to do 3 things. 1. Avoid crashing into other agents. 2. Match the average direction of nearby agents. 3. Avoid the mouse when it is clicked down. These simple rules can lead to complex and organic looking alignment amongst all of the agents in the scene."
+        ],
+        "gui": {
+            "carCount": {
+                "type": "slider",
+                "id": "carCount",
+                "label": "Cars: $VALUE",
+                "min": 5,
+                "max": 1000,
+                "defaultValue": 100,
+                "step": 1,
+                "update": true
+            }
+        }
+    },
+    "magnets": {
+        "id": "magnets",
+        "type": "p5",
+        "title": "Magnets",
+        "description": [
+            "Not much to say really, just a bunch of magnets."
+        ],
+        "gui": {}
+    },
+    "mountain": {
+        "id": "mountain",
+        "type": "p5",
+        "title": "Mountains",
+        "description": [
+            "I forget where I got the inspiration to make this. The colors look nice though."
+        ],
+        "gui": {}
+    },
+    "drawingMachine": {
+        "id": "drawingMachine",
+        "type": "p5",
+        "title": "Drawing Machine",
+        "description": [
+            "Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."
+        ],
+        "gui": {}
+    },
+    "planets": {
+        "id": "planets",
+        "type": "p5",
+        "title": "Planets",
+        "description": [
+            "Not quite to scale. Move with WASDZXR."
+        ],
+        "gui": {}
+    },
+    "astar": {
+        "id": "astar",
+        "type": "p5",
+        "title": "A* Pathfinding",
+        "description": [
+            "Click to draw walls, shift click to remove walls. Hold S/E and click to place the start and end points. Press space to start/stop searching and press D for tile cost information."
+        ],
+        "gui": {}
+    },
+    "caves": {
+        "id": "caves",
+        "type": "p5",
+        "title": "Cave Generation",
+        "description": [
+            "Cave generator powered by cellular automata."
+        ],
+        "gui": {
+            "density": {
+                "type": "slider",
+                "id": "density",
+                "label": "Density: $VALUE",
+                "min": 0,
+                "max": 1,
+                "defaultValue": 0.48,
+                "step": 0.01,
+                "update": false
+            },
+            "scale": {
+                "type": "slider",
+                "id": "scale",
+                "label": "Scale: $VALUE",
+                "min": 4,
+                "max": 20,
+                "defaultValue": 10,
+                "step": 1,
+                "update": false
+            },
+            "seed": {
+                "type": "text",
+                "id": "seed",
+                "placeholder": "Enter seed",
+                "defaultValue": "",
+                "update": false
+            },
+            "generate": {
+                "type": "button",
+                "id": "generate",
+                "label": "Generate",
+                "className": "btn btn-primary btn-block",
+                "update": true
+            }
+        }
+    },
+    "mandala": {
+        "id": "mandala",
+        "type": "p5",
+        "title": "Mandala Generator",
+        "description": [
+            "Procedurally generated circle patterns. Pattern segments are generated using perlin noise. Press R to generate a new pattern."
+        ],
+        "gui": {}
+    },
+    "collisions": {
+        "id": "collisions",
+        "type": "d3",
+        "title": "D3-powered collisions",
+        "description": [
+            "Experimenting with D3 forces."
+        ],
+        "gui": {
+            "count": {
+                "type": "slider",
+                "id": "count",
+                "label": "Count: $VALUE",
+                "min": 1,
+                "max": 400,
+                "defaultValue": 50,
+                "step": 1,
+                "update": true
+            }
+        }
+    },
+    "fork": {
+        "id": "fork",
+        "type": "p5",
+        "title": "Fork",
+        "description": [],
+        "gui": {
+            "score": {
+                "type": "label",
+                "id": "score",
+                "format": "Score: $VALUE",
+                "defaultValue": 0
+            }
+        }
+    }
 }

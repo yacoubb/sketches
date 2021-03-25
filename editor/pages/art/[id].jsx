@@ -1,163 +1,156 @@
-import React, { Component } from 'react';
-import Layout from '../../components/layout';
-import Head from 'next/head';
-import css from '../../components/main.scss';
+import React, { useEffect, useReducer, useState } from 'react'
+import { useRouter } from 'next/router'
+import Layout from '../../components/layout'
+import Head from 'next/head'
+import css from '../../components/main.scss'
 
-import index from '../../../sketch-index.json';
-import Link from 'next/link';
+import index from '../../../sketch-index.json'
+import Link from 'next/link'
 
-import D3Container from '../../components/d3container';
-import P5Container from '../../components/p5container';
+import D3Container from '../../components/d3container'
+import P5Container from '../../components/p5container'
 
-class ArtLayout extends Component {
-	static async getInitialProps(ctx) {
-		const id = ctx.query.id;
-		var info = index[id];
-		if (info == undefined) {
-			info = {
-				id: undefined,
-				title: 'Page not found',
-				description: [`A sketch with the name ${ctx.query.id} doesn't exist!`],
-			};
-		}
-		if (info['gui'] == undefined) {
-			info['gui'] = [];
-		}
-		return {
-			id,
-			info,
-		};
-	}
+var guiUpdateFunction
 
-	constructor(props) {
-		super(props);
-		this.state = { args: {} };
-		for (var guiElem of props.info['gui']) {
-			this.state[guiElem['id']] = guiElem['value'];
-			this.state.args[guiElem['id']] = guiElem['value'];
-		}
-		this.updateArgs = this.updateArgs.bind(this);
-	}
+const ArtLayout = () => {
+    const router = useRouter()
+    const { id } = router.query
 
-	updateArgs() {
-		var updatedArgs = { runTime: new Date().valueOf() };
-		for (var guiElem of this.props.info['gui']) {
-			updatedArgs[guiElem['id']] = this.state[guiElem['id']];
-		}
+    const sketchInfo = index[id] ?? {
+        id: undefined,
+        title: 'Page not found',
+        description: [`A sketch with the name ${id} doesn't exist!`],
+    }
 
-		this.setState({ args: updatedArgs });
-	}
+    const guiItems = sketchInfo['gui'] ?? {}
 
-	gui() {
-		return (
-			<div className="col-lg-2">
-				{this.props.info['gui'].map((guiElem, idx, arr) => {
-					switch (guiElem['type']) {
-						case 'slider':
-							var label = guiElem['label'];
-							label = label.replace('$VALUE', `${this.state[guiElem['id']]}`);
-							return (
-								<React.Fragment key={idx}>
-									{label}
-									<input
-										type="range"
-										className="custom-range"
-										min={guiElem['min']}
-										max={guiElem['max']}
-										value={this.state[guiElem['id']]}
-										step={guiElem['step']}
-										id={guiElem['id']}
-										onChange={(e) => {
-											this.setState({ [guiElem['id']]: e.target.value }, () => {
-												if (guiElem['update']) {
-													this.updateArgs();
-												}
-											});
-										}}
-									/>
-								</React.Fragment>
-							);
-							break;
-						case 'text':
-							return (
-								<input
-									key={idx}
-									type="text"
-									className="form-control"
-									id={guiElem['id']}
-									// aria-describedby="emailHelp"
-									placeholder={guiElem['placeholder']}
-									value={this.state[guiElem['id']]}
-									onChange={(e) => {
-										this.setState({ [guiElem['id']]: e.target.value }, () => {
-											if (guiElem['update']) {
-												this.updateArgs();
-											}
-										});
-									}}
-									style={{ margin: '1em 0 1em 0' }}
-								/>
-							);
-							break;
-						case 'button':
-							return (
-								// TODO one day add other functionality
-								<button
-									key={idx}
-									className={guiElem['className']}
-									onClick={guiElem['update'] ? this.updateArgs : () => {}}
-								>
-									{guiElem['label']}
-								</button>
-							);
-							break;
-					}
-				})}
-			</div>
-		);
-	}
+    const guiReducer = (state, action) => {
+        switch (action.type) {
+            case 'update':
+                return { ...state, runTime: new Date().valueOf() }
+            case 'setValue':
+                return {
+                    ...state,
+                    [action.id]: { value: action.value, update: (val) => guiUpdateFunction(action.id, val) },
+                }
+            default:
+                throw new Error(`action of type ${action.type} is invalid`)
+        }
+    }
 
-	render() {
-		return (
-			<>
-				<Head>
-					<meta charSet="utf-8" />
-					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-					<title>Art</title>
-				</Head>
-				<Layout>
-					<div className="container" style={{ paddingTop: '2em' }}>
-						<h1>{this.props.info['title']}</h1>
-						<div>
-							{this.props.info['description'].map((val, idx) => (
-								<p key={idx}>{val}</p>
-							))}
-						</div>
-						{this.props.info['id'] !== undefined ? (
-							<div className="row">
-								<div className="col-lg" style={{ height: '70vmin' }}>
-									{this.props.info['type'] === 'd3' && (
-										<D3Container id={this.props.info['id']} args={this.state.args} />
-									)}
-									{this.props.info['type'] === 'p5' && (
-										<P5Container id={this.props.info['id']} args={this.state.args} />
-									)}
-								</div>
-								{this.props.info['gui'].length > 0 && this.gui()}
-							</div>
-						) : (
-							<Link href="/editor">
-								<button className="btn btn-primary">Return to d3es</button>
-							</Link>
-						)}
+    const [guiState, guiDispatch] = useReducer(guiReducer, {})
 
-						<br />
-						<p style={{ fontSize: '12px', color: `${css.linkHover}` }}>Interactive pages work best on desktop!</p>
-					</div>
-				</Layout>
-			</>
-		);
-	}
+    useEffect(() => {
+        Object.values(guiItems).forEach((guiItem) => {
+            guiDispatch({ type: 'setValue', id: guiItem.id, value: guiItem.defaultValue })
+        })
+        guiDispatch({ type: 'update' })
+    }, [id])
+
+    const [args, setArgs] = useState({})
+    useEffect(() => {
+        setArgs(guiState)
+    }, [guiState.runTime])
+
+    guiUpdateFunction = (id, val) => {
+        guiDispatch({ type: 'setValue', id: id, value: val })
+        if (guiItems[id].update) {
+            guiDispatch({ type: 'update' })
+        }
+    }
+
+    const gui = (
+        <div className="col-lg-2">
+            {Object.values(guiItems).map((guiElem, idx) => {
+                const { id, type } = guiElem
+                if (guiState[id] === undefined) {
+                    return null
+                }
+
+                switch (type) {
+                    case 'slider':
+                        var label = guiElem['label']
+                        label = label.replace('$VALUE', `${guiState[id].value}`)
+                        return (
+                            <React.Fragment key={idx}>
+                                {label}
+                                <input
+                                    type="range"
+                                    className="custom-range"
+                                    min={guiElem['min']}
+                                    max={guiElem['max']}
+                                    value={guiState[id].value}
+                                    step={guiElem['step']}
+                                    id={id}
+                                    // onChange={(e) => guiUpdateFunction(id, e.target.value)}
+                                    onChange={(e) => guiState[id].update(e.target.value)}
+                                />
+                            </React.Fragment>
+                        )
+                    case 'text':
+                        return (
+                            <input
+                                key={idx}
+                                type="text"
+                                className="form-control"
+                                id={id}
+                                // aria-describedby="emailHelp"
+                                placeholder={guiElem['placeholder']}
+                                value={guiState[id].value}
+                                onChange={(e) => guiState[id].update(e.target.value)}
+                                style={{ margin: '1em 0 1em 0' }}
+                            />
+                        )
+                    case 'button':
+                        return (
+                            // TODO one day add other functionality
+                            <button key={idx} className={guiElem['className']} onClick={() => guiDispatch({ type: 'update' })}>
+                                {guiElem['label']}
+                            </button>
+                        )
+                    case 'label':
+                        var format = guiElem['format'].replace('$VALUE', `${guiState[id].value}`)
+                        return <span>{format}</span>
+                }
+            })}
+        </div>
+    )
+
+    return (
+        <>
+            <Head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Art</title>
+            </Head>
+            <Layout>
+                <div className="container" style={{ paddingTop: '2em' }}>
+                    <h1>{sketchInfo['title']}</h1>
+                    <div>
+                        {sketchInfo['description'].map((val, idx) => (
+                            <p key={idx}>{val}</p>
+                        ))}
+                    </div>
+                    {sketchInfo['id'] !== undefined ? (
+                        <div className="row">
+                            <div className="col-lg" style={{ height: '70vmin' }}>
+                                {sketchInfo['type'] === 'd3' && <D3Container id={sketchInfo['id']} args={args} />}
+                                {sketchInfo['type'] === 'p5' && <P5Container id={sketchInfo['id']} args={args} />}
+                            </div>
+                            {Object.keys(guiItems).length > 0 && gui}
+                        </div>
+                    ) : (
+                        <Link href="/editor">
+                            <button className="btn btn-primary">Return to d3es</button>
+                        </Link>
+                    )}
+
+                    <br />
+                    <p style={{ fontSize: '12px', color: `${css.linkHover}` }}>Interactive pages work best on desktop!</p>
+                </div>
+            </Layout>
+        </>
+    )
 }
 
-export default ArtLayout;
+export default ArtLayout

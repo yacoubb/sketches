@@ -8,7 +8,7 @@ import sketchIndex from '../../sketch-index.json';
 export default function Index() {
 	const sketches = Object.keys(sketchIndex).map((sketchID, idx) => (
 		<div className="col-sm-4" key={idx}>
-			<Link href={`/editor/${sketchID}`}>
+			<Link href={`/art/${sketchID}`}>
 				<a>
 					{/* <img src={`/sketch-thumbs/${sketchID}.png`} style={{ width: '100%', marginBottom: '1em' }} /> */}
 					<img
