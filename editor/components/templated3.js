@@ -1,3 +1,7 @@
-const d3Sketch = (...args) => {}
+import * as d3 from 'd3';
 
-export default d3Sketch
+const d3Sketch = ({ id }) => {
+	const container = d3.select(`#${id}`);
+};
+
+export default d3Sketch;
