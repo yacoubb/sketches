@@ -10,37 +10,36 @@ print('loading sketches and thumbnails')
 
 print('double check import statements before pushing!')
 
-sketch_files = {}
-for filename in os.listdir('./editor/sketchfiles'):
-    sketch_files[filename[:-3]] = os.path.abspath(os.path.join('./editor/sketchfiles', filename))
+# iterate through entries in sketch index
+# check if a folder exists, create
+# check if a js file exists in editor, copy
+# check if a thumbnail exists in thumbs, copy
+# go through files in interactive and check that they all have a thumb
+# remove any that don't
 
-thumbnails = {}
-for filename in os.listdir('./thumbs'):
-    thumbnails[filename[:-4]] = os.path.abspath(os.path.join('./thumbs', filename))
+index = json.load(open('./sketch-index.json'))
+editor_sketchfiles = './editor/sketchfiles'
+thumbs = './thumbs'
 
-print(f'got {len(list(sketch_files))} sketches and {len(list(thumbnails))} thumbnails')
+for sketch_id in index:
+    print(sketch_id)
+    sketch_folder = f'./interactive/{sketch_id}'
+    sketch_file = f'{editor_sketchfiles}/{sketch_id}.js'
+    thumb_file = f'{thumbs}/{sketch_id}.png'
 
-with open('./sketch-index.json', 'r') as index_file:
-    index = json.loads(index_file.read())
+    if not os.path.isdir(sketch_folder):
+        print(f'creating interactive/{sketch_folder}')
+        os.mkdir(sketch_folder)
+    if os.path.exists(sketch_file):
+        shutil.copy(sketch_file, f'{sketch_folder}/{sketch_id}.js')
+    if os.path.exists(thumb_file):
+        shutil.copy(thumb_file, f'{sketch_folder}/thumb.png')
 
-print(f'got {len(list(index))} sketches in index:')
-
-for sketch_name in list(index):
-    print(f'    {sketch_name}')
-    sketch_folder_path = os.path.abspath(f'./interactive/{sketch_name}')
-    if not os.path.isdir(sketch_folder_path):
-        print(f'making new folder for sketch {sketch_name}')
-        os.mkdir(sketch_folder_path)
-    if sketch_name in sketch_files and sketch_name in thumbnails:
-        current_sketch = os.path.join(sketch_folder_path, f'{sketch_name}.js')
-        current_thumb = os.path.join(sketch_folder_path, 'thumb.png')
-        if os.path.exists(current_sketch):
-            os.remove(current_thumb)
-        if os.path.exists(current_thumb):
-            os.remove(current_thumb)
-
-        shutil.copy(sketch_files[sketch_name], current_sketch)
-        shutil.copy(thumbnails[sketch_name], current_thumb)
-    else:
-        print(f'incomplete sketch: missing files for {sketch_name}')
-        shutil.rmtree(sketch_folder_path)
+for sketch_id in os.listdir('./interactive'):
+    files = os.listdir(f'./interactive/{sketch_id}')
+    if not f'{sketch_id}.js' in files:
+        print(f'removing {sketch_id}, no js')
+        shutil.rmtree(f'./interactive/{sketch_id}')
+    if not f'thumb.png' in files:
+        print(f'removing {sketch_id}, no thumbnail')
+        shutil.rmtree(f'./interactive/{sketch_id}')
