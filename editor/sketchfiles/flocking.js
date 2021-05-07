@@ -29,7 +29,7 @@ export default (width, height, parentDivID) => (p) => {
     }
 
     p.init = () => {
-        if (!!!args) {
+        if (args === undefined || Object.keys(args ?? {}).length === 0) {
             return
         }
         while (cars.length > args.carCount.value) {
@@ -130,6 +130,7 @@ export default (width, height, parentDivID) => (p) => {
                 this.pos.set(this.pos.x, this.pos.y + p.height)
             }
             this.vel.add(this.acc)
+            this.vel = this.vel.mult(0.99)
             this.vel.limit(maxSpeed)
         }
 

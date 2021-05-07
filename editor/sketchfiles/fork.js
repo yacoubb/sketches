@@ -32,6 +32,12 @@ function shuffle(array) {
 
 export default (width, height, parentDivID) => (p) => {
     var sketchContainer
+    var needUpdate = true
+
+    var flashTimer = 0
+    var flashColor = '#000000'
+
+    const timeSetting = 5
 
     const boardWidth = 8
     var forkSources = []
@@ -44,19 +50,23 @@ export default (width, height, parentDivID) => (p) => {
     p.setup = () => {
         sketchContainer = document.getElementById(parentDivID)
         const canvas = p.createCanvas(width, height)
-
+        p.textAlign(p.CENTER, p.CENTER)
         p.noLoop()
         p.noStroke()
         setTimeout(() => {
             p.windowResized()
+            p.loop()
         }, 10)
         score = 0
     }
 
     var args = undefined
     p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
-        args = newProps.args
-        p.init()
+        if (args !== newProps.args) {
+            args = newProps.args
+            console.log(args)
+            p.init()
+        }
     }
 
     var mouseBoardX = -1
@@ -81,7 +91,7 @@ export default (width, height, parentDivID) => (p) => {
         if (newX !== mouseBoardX || newY !== mouseBoardY) {
             mouseBoardX = newX
             mouseBoardY = newY
-            p.draw()
+            needUpdate = true
         }
     }
 
@@ -90,15 +100,24 @@ export default (width, height, parentDivID) => (p) => {
 
     p.mouseClicked = (e) => {
         if (mouseBoardX >= 0 && mouseBoardX < boardWidth && mouseBoardY >= 0 && mouseBoardY < boardWidth) {
-            console.log('clicked board')
-            console.log(forkSources)
-            console.log(mouseBoardX, mouseBoardY)
+            // console.log('clicked board')
+            // console.log(forkSources)
+            // console.log(mouseBoardX, mouseBoardY)
 
             if (arrayContainsCoords(forkSources, [mouseBoardX, mouseBoardY])) {
                 score++
-                args.score.update(score)
+                args.score.updateVal(score)
+                flashTimer = 0.1
+                flashColor = '#00FF00'
+            } else {
+                flashTimer = 0.1
+                flashColor = '#FF0000'
+                time = 0
+                args.time.updateVal(0)
+                clearInterval(timeHandler)
+                needUpdate = true
             }
-            p.init()
+            generateMoves()
         }
     }
 
@@ -119,7 +138,52 @@ export default (width, height, parentDivID) => (p) => {
         return arr.some((c) => c[0] === coords[0] && c[1] === coords[1])
     }
 
+    var countdown = 3
+    var time = 0
+    var timeHandler = undefined
     p.init = () => {
+        if (args === undefined || Object.keys(args ?? {}).length === 0) {
+            return
+        }
+        if (timeHandler !== undefined) {
+            return
+        }
+        if (args.name.value.length === 0) {
+            needUpdate = true
+            return
+        }
+        console.log(args)
+        generateMoves()
+        time = timeSetting
+        score = 0
+
+        const startTimer = () => {
+            args.time.updateVal(time)
+            args.score.updateVal(score)
+            timeHandler = setInterval(() => {
+                time = time - 1
+                args.time.updateVal(time)
+                if (time <= 0) {
+                    clearInterval(timeHandler)
+                    timeHandler = undefined
+                }
+            }, 1000)
+        }
+
+        countdown = 3
+        const countdownHandler = setInterval(() => {
+            needUpdate = true
+            countdown -= 1
+            if (countdown <= 0) {
+                clearInterval(countdownHandler)
+                startTimer()
+            }
+        }, 1000)
+
+        needUpdate = true
+    }
+
+    const generateMoves = () => {
         const forkX = Math.floor(Math.random() * boardWidth)
         const forkY = Math.floor(Math.random() * boardWidth)
 
@@ -128,7 +192,7 @@ export default (width, height, parentDivID) => (p) => {
         let forkableCount = Math.ceil(Math.abs(randn_bm())) + 1
 
         forkableSquares = hitSquares.filter((_, index) => index < forkableCount)
-        p.draw()
+        needUpdate = true
 
         // determine fork sources from squares
         const sources = []
@@ -144,15 +208,30 @@ export default (width, height, parentDivID) => (p) => {
                 forkSources.push(forkSource)
             }
         }
-
-        // console.log(forkSources)
     }
 
     p.draw = () => {
-        if (!!!p) {
+        if (!needUpdate || args === undefined) {
             return
         }
         p.background(51, 51, 51)
+        if (args?.name?.value.length === 0) {
+            p.fill(255, 255, 255)
+            p.text('Enter your name on the right hand side', p.width / 2, p.height / 2)
+            return
+        }
+
+        if (countdown > 0) {
+            p.text(countdown, p.width / 2, p.height / 2)
+            return
+        }
+
+        if (time === 0) {
+            p.fill(255, 255, 255)
+            p.text(`Your score: ${score}`, p.width / 2, p.height / 2)
+            return
+        }
+
         p.push()
         p.translate(translatePadding, 0)
 
@@ -170,5 +249,11 @@ export default (width, height, parentDivID) => (p) => {
             }
         }
         p.pop()
+        if (flashTimer > 0) {
+            flashTimer -= 0.02
+            p.background(flashColor)
+        } else {
+            needUpdate = false
+        }
     }
 }

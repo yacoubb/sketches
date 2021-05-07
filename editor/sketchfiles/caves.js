@@ -36,6 +36,9 @@ export default (width, height, parentDivID) => (p) => {
     }
 
     p.init = () => {
+        if (args === undefined || Object.keys(args ?? {}).length === 0) {
+            return
+        }
         if (args.seed.value.length > 0) {
             p.randomSeed(args.seed.value.hashCode())
         } else {

@@ -16,7 +16,7 @@
                 "label": "Cars: $VALUE",
                 "min": 5,
                 "max": 1000,
-                "defaultValue": 100,
+                "defaultValue": 20,
                 "step": 1,
                 "update": true
             }
@@ -26,36 +26,28 @@
         "id": "magnets",
         "type": "p5",
         "title": "Magnets",
-        "description": [
-            "Not much to say really, just a bunch of magnets."
-        ],
+        "description": ["Not much to say really, just a bunch of magnets."],
         "gui": {}
     },
     "mountain": {
         "id": "mountain",
         "type": "p5",
         "title": "Mountains",
-        "description": [
-            "I forget where I got the inspiration to make this. The colors look nice though."
-        ],
+        "description": ["I forget where I got the inspiration to make this. The colors look nice though."],
         "gui": {}
     },
     "drawingMachine": {
         "id": "drawingMachine",
         "type": "p5",
         "title": "Drawing Machine",
-        "description": [
-            "Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."
-        ],
+        "description": ["Inspired from a post I saw on reddit. Reload the page to get new and unique patterns."],
         "gui": {}
     },
     "planets": {
         "id": "planets",
         "type": "p5",
         "title": "Planets",
-        "description": [
-            "Not quite to scale. Move with WASDZXR."
-        ],
+        "description": ["Not quite to scale. Move with WASDZXR."],
         "gui": {}
     },
     "astar": {
@@ -71,9 +63,7 @@
         "id": "caves",
         "type": "p5",
         "title": "Cave Generation",
-        "description": [
-            "Cave generator powered by cellular automata."
-        ],
+        "description": ["Cave generator powered by cellular automata."],
         "gui": {
             "density": {
                 "type": "slider",
@@ -124,9 +114,7 @@
         "id": "collisions",
         "type": "d3",
         "title": "D3-powered collisions",
-        "description": [
-            "Experimenting with D3 forces."
-        ],
+        "description": ["Experimenting with D3 forces."],
         "gui": {
             "count": {
                 "type": "slider",
@@ -143,14 +131,37 @@
     "fork": {
         "id": "fork",
         "type": "p5",
-        "title": "Fork",
-        "description": [],
+        "title": "Chess Fork Finder",
+        "description": ["Test your pattern recognition abilities!"],
         "gui": {
+            "name": {
+                "type": "text",
+                "id": "name",
+                "format": "Name: $VALUE",
+                "defaultValue": "",
+                "placeholder": "Enter your name",
+                "update": false
+            },
+            "setName": {
+                "type": "button",
+                "id": "setName",
+                "label": "Start",
+                "className": "btn btn-primary btn-block",
+                "update": true
+            },
+            "time": {
+                "type": "label",
+                "id": "time",
+                "format": "Time: $VALUEs",
+                "defaultValue": 60,
+                "update": false
+            },
             "score": {
                 "type": "label",
                 "id": "score",
                 "format": "Score: $VALUE",
-                "defaultValue": 0
+                "defaultValue": 0,
+                "update": false
             }
         }
     }

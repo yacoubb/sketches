@@ -10,8 +10,6 @@ import Link from 'next/link'
 import D3Container from '../../components/d3container'
 import P5Container from '../../components/p5container'
 
-var guiUpdateFunction
-
 const ArtLayout = () => {
     const router = useRouter()
     const { id } = router.query
@@ -29,20 +27,50 @@ const ArtLayout = () => {
             case 'update':
                 return { ...state, runTime: new Date().valueOf() }
             case 'setValue':
+                if (!('value' in action)) {
+                    throw new Error('action has no value property')
+                }
                 return {
                     ...state,
-                    [action.id]: { value: action.value, update: (val) => guiUpdateFunction(action.id, val) },
+                    [action.id]: { ...(state[action.id] ?? { id: action.id }), value: action.value },
                 }
+            case 'meta':
+                if (!('meta' in action)) {
+                    throw new Error('action has no meta property')
+                }
+                return {
+                    ...state,
+                    [action.id]: { ...(state[action.id] ?? { id: action.id }), ...action.meta },
+                }
+            case 'clear':
+                return {}
             default:
                 throw new Error(`action of type ${action.type} is invalid`)
         }
     }
 
     const [guiState, guiDispatch] = useReducer(guiReducer, {})
-
     useEffect(() => {
-        Object.values(guiItems).forEach((guiItem) => {
-            guiDispatch({ type: 'setValue', id: guiItem.id, value: guiItem.defaultValue })
+        // initialise guiState
+        guiDispatch({ type: 'clear' })
+        Object.keys(guiItems).forEach((id) => {
+            guiDispatch({ type: 'setValue', id, value: guiItems[id].defaultValue })
+
+            guiDispatch({
+                type: 'meta',
+                id,
+                meta: {
+                    updateVal: (value) => {
+                        guiDispatch({ type: 'setValue', id, value })
+                        if (guiItems[id].update) {
+                            guiDispatch({ type: 'update' })
+                        }
+                    },
+                    updateMeta: (meta) => {
+                        guiDispatch({ type: 'meta', id, meta })
+                    },
+                },
+            })
         })
         guiDispatch({ type: 'update' })
     }, [id])
@@ -50,14 +78,7 @@ const ArtLayout = () => {
     const [args, setArgs] = useState({})
     useEffect(() => {
         setArgs(guiState)
-    }, [guiState.runTime])
-
-    guiUpdateFunction = (id, val) => {
-        guiDispatch({ type: 'setValue', id: id, value: val })
-        if (guiItems[id].update) {
-            guiDispatch({ type: 'update' })
-        }
-    }
+    }, [guiState.runTime, id])
 
     const gui = (
         <div className="col-lg-2">
@@ -83,7 +104,7 @@ const ArtLayout = () => {
                                     step={guiElem['step']}
                                     id={id}
                                     // onChange={(e) => guiUpdateFunction(id, e.target.value)}
-                                    onChange={(e) => guiState[id].update(e.target.value)}
+                                    onChange={(e) => guiState[id].updateVal(e.target.value)}
                                 />
                             </React.Fragment>
                         )
@@ -97,7 +118,7 @@ const ArtLayout = () => {
                                 // aria-describedby="emailHelp"
                                 placeholder={guiElem['placeholder']}
                                 value={guiState[id].value}
-                                onChange={(e) => guiState[id].update(e.target.value)}
+                                onChange={(e) => guiState[id].updateVal(e.target.value)}
                                 style={{ margin: '1em 0 1em 0' }}
                             />
                         )
@@ -110,9 +131,23 @@ const ArtLayout = () => {
                         )
                     case 'label':
                         var format = guiElem['format'].replace('$VALUE', `${guiState[id].value}`)
-                        return <span>{format}</span>
+                        return <div key={idx}>{format}</div>
                 }
             })}
+        </div>
+    )
+
+    // we should only render the sketch when all of the gui elements have been initialised in the state variable
+    const stateKeys = new Set(Object.keys(guiState))
+    const listKeys = new Set(Object.keys(guiItems))
+    const diff = (a, b) => new Set([...a].filter((x) => !b.has(x)))
+
+    const symDiff = new Set([...diff(stateKeys, listKeys)], [...diff(listKeys, stateKeys)])
+
+    const sketch = symDiff.size === 1 && symDiff.has('runTime') && (
+        <div className="col-lg" style={{ height: '70vmin' }}>
+            {sketchInfo['type'] === 'd3' && <D3Container id={sketchInfo['id']} args={args} />}
+            {sketchInfo['type'] === 'p5' && <P5Container id={sketchInfo['id']} args={args} />}
         </div>
     )
 
@@ -133,10 +168,7 @@ const ArtLayout = () => {
                     </div>
                     {sketchInfo['id'] !== undefined ? (
                         <div className="row">
-                            <div className="col-lg" style={{ height: '70vmin' }}>
-                                {sketchInfo['type'] === 'd3' && <D3Container id={sketchInfo['id']} args={args} />}
-                                {sketchInfo['type'] === 'p5' && <P5Container id={sketchInfo['id']} args={args} />}
-                            </div>
+                            {sketch}
                             {Object.keys(guiItems).length > 0 && gui}
                         </div>
                     ) : (
